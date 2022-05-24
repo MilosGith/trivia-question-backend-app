@@ -16,20 +16,6 @@ public class TriviaQuestion {
         Collections.shuffle(possibleAnswers);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder string = new StringBuilder();
-        string.append("id: " + id + "\n" +
-                      "Question: " + questionText + "\n" +
-                      "Wrong answers: ");
-
-        for (String obj : possibleAnswers) {
-            string.append(obj + " | ");
-        }
-        string.append("\n");
-        return string.toString();
-    }
-
     public int getId() {
         return id;
     }
@@ -42,4 +28,17 @@ public class TriviaQuestion {
         return questionText;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+        string.append("id: " + id + "\n" +
+                "Question: " + questionText + "\n" +
+                "Wrong answers: ");
+
+        for (String obj : possibleAnswers) {
+            string.append(obj + " | ");
+        }
+        string.append("\n");
+        return string.toString();
+    }
 }

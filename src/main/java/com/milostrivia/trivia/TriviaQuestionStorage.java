@@ -37,12 +37,13 @@ public class TriviaQuestionStorage {
         correctAnswers.put(question.id, correctAnswer);
     }
 
-    public Boolean checkAnswer(int id, String answer) {
-        System.out.println("from post request: " + answer);
-        System.out.println("From db: " + (correctAnswers.get(id)));
-        System.out.println(getQuestionByID(id).questionText);
-        if (correctAnswers.containsKey(id)) return correctAnswers.get(id).equalsIgnoreCase(answer);
-        else return false;
+    public Response checkAnswer(Answer answer) {
+        int id = answer.getId();
+        if (correctAnswers.containsKey(id)) {
+            return new Response(id, answer.getAnswer(), correctAnswers.get(id).equalsIgnoreCase(answer.getAnswer()));
+        } else {
+            return new Response(id, answer.getAnswer(), false);
+        }
     }
 
     public String getAnswerForQuestion(int id) {
@@ -55,11 +56,6 @@ public class TriviaQuestionStorage {
             if (question.getId() == id) return question;
         }
         return null;
-    }
-
-    public TriviaQuestion getQuestion(int index) {
-        if (index < questionStorage.size()) return questionStorage.get(index);
-        else return null;
     }
 
     public List<TriviaQuestion> getAllQuestions() {

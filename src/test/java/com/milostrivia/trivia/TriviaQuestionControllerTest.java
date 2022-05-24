@@ -36,7 +36,7 @@ class TriviaQuestionControllerTest {
 
     @Test
     public  void testGetQuestions() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/questions?amount=5")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/questions")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").exists())
@@ -51,19 +51,19 @@ class TriviaQuestionControllerTest {
         TriviaQuestionController controller = new TriviaQuestionController();
         TriviaQuestionStorage.getInstance().clearStorage();
         ArrayList<String> list = new ArrayList<>(Arrays.asList("Yes", "No"));
-        TriviaQuestion question = new TriviaQuestion(TriviaQuestionStorage.getInstance().getNewID(),"Is this question typed in english", "Yes", list);
+        TriviaQuestion question = new TriviaQuestion(TriviaQuestionStorage.getInstance().getNewID(),"Is this question written in english", "Yes", list);
         TriviaQuestionStorage.getInstance().addQuestion(question, "Yes");
-        TriviaQuestion question1 = TriviaQuestionStorage.getInstance().getQuestion(0);
+        TriviaQuestion question1 = TriviaQuestionStorage.getInstance().getQuestionByID(0);
         System.out.println(question1.getQuestionText());
         System.out.println(TriviaQuestionStorage.getInstance().getAnswerForQuestion(0));
         Answer correctAnswer = new Answer(0, "Yes");
         Answer wrongAnswer = new Answer(0, "No");
 
         Response wrongResponse = controller.checkanswer(wrongAnswer);
-        assert(wrongResponse.getResponse().equals("The answer is not correct"));
+        assert(!wrongResponse.getIs_correct());
 
         Response correctResponse = controller.checkanswer(correctAnswer);
-        assert(correctResponse.getResponse().equals("The answer is correct"));
+        assert(correctResponse.getIs_correct());
     }
 }
 

@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,33 +20,12 @@ import static com.milostrivia.trivia.Util.decodeBase64;
 @Component
 public class TriviaQuestionService {
 
-    public List<TriviaQuestion> getTriviaQuestions(int amount) {
-        try {
-            TriviaQuestionStorage.getInstance().clearStorage();
-            URL url = new URL("https://opentdb.com/api.php?amount=" + amount + "&encode=base64");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.connect();
-
-            int responseCode = conn.getResponseCode();
-
-            if (responseCode != 200) {
-                throw new RuntimeException("HttpResponseCode: " + responseCode);
-            } else {
-                StringBuilder body = new StringBuilder();
-                Scanner scanner = new Scanner(url.openStream());
-
-                while (scanner.hasNext()) {
-                    body.append(scanner.nextLine());
-                }
-
-                scanner.close();
-                processGetResult(String.valueOf(body));
-            }
-
-        } catch (Exception e) {
-
-        }
+    public List<TriviaQuestion> getTriviaQuestions(int amount) throws ParseException {
+        TriviaQuestionStorage.getInstance().clearStorage();
+        String uri = "https://opentdb.com/api.php?amount=" + amount + "&encode=base64";
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(uri, String.class);
+        processGetResult(result);
         return TriviaQuestionStorage.getInstance().getAllQuestions();
     }
 
@@ -58,7 +38,7 @@ public class TriviaQuestionService {
             String questionText = decodeBase64((String) question.get("question"));
             String correctAnswer = decodeBase64((String) question.get("correct_answer"));
             JSONArray wrongAnswers = (JSONArray) question.get("incorrect_answers");
-            ArrayList<String> wrongAnswerList = new ArrayList<String>();
+            ArrayList<String> wrongAnswerList = new ArrayList<>();
             if (wrongAnswers != null) {
                 for (Object wrongAnswer : wrongAnswers) {
                     wrongAnswerList.add(decodeBase64((String) wrongAnswer));
@@ -67,9 +47,6 @@ public class TriviaQuestionService {
 
             TriviaQuestion newQuestion = new TriviaQuestion(TriviaQuestionStorage.getInstance().getNewID(), questionText, correctAnswer, wrongAnswerList);
             TriviaQuestionStorage.getInstance().addQuestion(newQuestion, correctAnswer);
-            //System.out.println(newQuestion);
-
-            //System.out.println(TriviaQuestionStorage.getInstance().getQuestion(0).toString());
         }
     }
 }

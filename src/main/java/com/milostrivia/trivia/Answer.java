@@ -10,17 +10,11 @@ public class Answer {
         this.answer = answer;
     }
 
-    public Response checkAnswer(int id, String response) {
-        System.out.println(response);
-        if (TriviaQuestionStorage.getInstance().checkAnswer(id, response)) return new Response(id, true);
-        else return new Response(id, false);
-    }
-
     public int getId() {
         return id;
     }
 
-    public String getString() {
+    public String getAnswer() {
         return answer;
     }
 }
