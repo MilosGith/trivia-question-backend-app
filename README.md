@@ -38,8 +38,8 @@ The checkanswer endpoint expects an Answer body. An example of a valid answer wo
 Upon making a call to this endpoint, a Response object will be returned. A Response looks like:
 ```json
 {
-    "id": 4,
-    "response": "Incorrect Answer",
+    "id": 0,
+    "response": "16",
     "is_correct": false
 }
 ```
