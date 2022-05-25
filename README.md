@@ -15,15 +15,15 @@ http://localhost:8080/checkanswer
 The questions endpoint provides a list of questions. Questions are in the following format:
 ```json
 {
-        "id": 3,
-        "questionText": "In the \"Dragon Ball\" franchise, what is the name of Goku's brother?",
+        "id": 0,
+        "questionText": "Whistler was the codename of this Microsoft Operating System.",
         "possibleAnswers": [
-            "Gohan",
-            "Vegeta",
-            "Bardock",
-            "Raditz"
+            "Windows 2000",
+            "Windows 95",
+            "Windows 7",
+            "Windows XP"
         ]
-    }
+}
 
 ```
 
@@ -31,7 +31,7 @@ The checkanswer endpoint expects an Answer body. An example of a valid answer wo
 ```json
 { 
 "id": 0, 
-"answer": "16" 
+"answer": "Windows XP" 
 }
 ```
 
@@ -39,7 +39,7 @@ Upon making a call to this endpoint, a Response object will be returned. A Respo
 ```json
 {
     "id": 0,
-    "response": "16",
+    "response": "Windows XP",
     "is_correct": false
 }
 ```
